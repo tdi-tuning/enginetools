@@ -1,0 +1,45 @@
+{
+    "name": "tdi-dean/enginetools",
+    "type": "library",
+    "description": "Engine tools",
+    "keywords": [
+        "tdi-dean",
+        "engine-tools"
+    ],
+    "homepage": "https://bitbucket.org/tdi-dean/enginetools",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dean Collins",
+            "email": "dean.collins@tdi-tuning.co.uk",
+            "homepage": "http://www.tdi-tuning.co.uk",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php" : ">=5.4.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit" : "4.*",
+        "scrutinizer/ocular": "~1.1",
+        "squizlabs/php_codesniffer": "~2.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "TdiDean\\EngineTools\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "TdiDean\\EngineTools\\Test\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0"
+        }
+    }
+}
