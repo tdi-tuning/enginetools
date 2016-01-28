@@ -9,7 +9,7 @@ Package of tools to help TDI Tuning work with engine data.
 Via Composer
 
 ``` bash
-$ composer require tdi-dean/engine-tools
+$ composer require tdi-dean/enginetools
 ```
 
 ## Usage
