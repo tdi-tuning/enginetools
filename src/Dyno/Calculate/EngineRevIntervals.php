@@ -2,7 +2,7 @@
 
 namespace TdiDean\EngineTools\Dyno\Calculate;
 
-class EngineShiftPoints
+class EngineRevIntervals
 {
   protected $_powerIntervals = [];
   protected $_torqueIntervals = [];

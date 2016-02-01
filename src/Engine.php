@@ -5,6 +5,7 @@ namespace TdiDean\EngineTools;
 class Engine
 {
   protected $_tag;
+  protected $_rev
   public $ps;
   public $bhp;
   public $kw;

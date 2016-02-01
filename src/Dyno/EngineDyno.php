@@ -3,7 +3,7 @@
 namespace TdiDean\EngineTools\Dyno;
 
 use TdiDean\EngineTools\Engine;
-use TdiDean\EngineTools\Dyno\Calculate\EngineShiftPoints;
+use TdiDean\EngineTools\Dyno\Calculate\EngineRevIntervals;
 use TdiDean\EngineTools\Dyno\Output\EngineDynoFigures;
 use TdiDean\EngineTools\Dyno\Output\EngineDynoGoogleGraph;
 
@@ -14,7 +14,7 @@ class EngineDyno
 
   public function __construct($stockPs = false, $stockNm = false, $tunedPs = false, $tunedNm = false, $powerIntervals = [], $torqueIntervals = [])
   {
-      $this->_engineDynoFigures = new EngineDynoFigures(new EngineShiftPoints($powerIntervals, $torqueIntervals), new Engine($stockPs, false, false, false, $stockNm, 'stock'));
+      $this->_engineDynoFigures = new EngineDynoFigures(new EngineRevIntervals($powerIntervals, $torqueIntervals), new Engine($stockPs, false, false, false, $stockNm, 'stock'));
 
       if(($tunedPs) || ($tunedNm))
       {
