@@ -2,9 +2,9 @@
 
 namespace TdiDean\EngineTools\Test;
 
-use TdiDean\EngineTools\Dyno\EngineDyno;
+use TdiDean\EngineTools\Dyno\EngineStockVsTunedDyno as EngineDyno;
 
-class EngineDynoTest extends \PHPUnit_Framework_TestCase
+class EngineStockVsTunedDynoTest extends \PHPUnit_Framework_TestCase
 {
 
   protected $_powerIntervals = [1000 => 15.4, 1500 => 25.7, 2000 => 48.8, 2500 => 60.4, 3000 => 68, 3500 => 76, 4000 => 82, 4500 => 87, 5000 => 93, 5500 => 97, 6000 => 100];
@@ -16,7 +16,7 @@ class EngineDynoTest extends \PHPUnit_Framework_TestCase
   public function testReturnFiguresAsArray(){
         $engineDyno = new EngineDyno(115, 275, 127, 303, $this->_powerIntervals, $this->_torqueIntervals);
         $results = $engineDyno->returnFigures(false);
-        
+
         $this->assertArraySubset([
               'stock' => [
                 'power' => [1000 => 17.71, 1500 => 29.56, 2000 => 56.12, 2500 => 69.46, 3000 => 78.2, 3500 => 87.4, 4000 => 94.3, 4500 => 100.05, 5000 => 106.95, 5500 => 111.55, 6000 => 115],

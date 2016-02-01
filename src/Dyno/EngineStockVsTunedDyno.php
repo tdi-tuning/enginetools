@@ -7,7 +7,7 @@ use TdiDean\EngineTools\Dyno\Calculate\EngineRevIntervals;
 use TdiDean\EngineTools\Dyno\Output\EngineDynoFigures;
 use TdiDean\EngineTools\Dyno\Output\EngineDynoGoogleGraph;
 
-class EngineDyno
+class EngineStockVsTunedDyno
 {
 
   protected $_engineDynoFigures;

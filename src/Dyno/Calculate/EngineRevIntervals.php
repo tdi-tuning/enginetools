@@ -40,12 +40,12 @@ class EngineRevIntervals
         $intervals = ($type == 'power') ? $this->_powerIntervals : $this->_torqueIntervals;
         if($intervals)
         {
-          $shiftPoints = [];
+          $revs = [];
           foreach($intervals as $revInterval => $figure)
           {
-            $shiftPoints[$revInterval] = $this->_figurePercent($engineValue, $figure);
+            $revs[$revInterval] = $this->_figurePercent($engineValue, $figure);
           }
-          return $shiftPoints;
+          return $revs;
         }
       }
       return false;
