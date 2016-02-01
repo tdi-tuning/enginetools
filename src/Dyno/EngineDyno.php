@@ -14,9 +14,12 @@ class EngineDyno
 
   public function __construct($stockPs = false, $stockNm = false, $tunedPs = false, $tunedNm = false, $powerIntervals = [], $torqueIntervals = [])
   {
-      $stockEngine = new Engine($stockPs, false, false, false, $stockNm);
-      $tunedEngine = new Engine($tunedPs, false, false, false, $tunedNm);
-      $this->_engineDynoFigures = new EngineDynoFigures(new EngineShiftPoints($powerIntervals, $torqueIntervals), $stockEngine, $tunedEngine);
+      $this->_engineDynoFigures = new EngineDynoFigures(new EngineShiftPoints($powerIntervals, $torqueIntervals), new Engine($stockPs, false, false, false, $stockNm, 'stock'));
+
+      if(($tunedPs) || ($tunedNm))
+      {
+        $this->_engineDynoFigures->addEngine(new Engine($tunedPs, false, false, false, $tunedNm, 'tuned'));
+      }
   }
 
   public function returnFigures($type = 'google')

@@ -26,8 +26,10 @@ class EngineDynoFiguresTest extends \PHPUnit_Framework_TestCase
     * Pass over stock engine and tuned engine with power / torque figures with rev intervals to return dyno points as an array.
     */
     public function testReturnFigures(){
-          $engineDyno = new EngineDynoFigures($this->_completeEngineShiftPoints, new Engine(115, false, false, false, 275), new Engine(127, false, false, false, 303));
+          $engineDyno = new EngineDynoFigures($this->_completeEngineShiftPoints, new Engine(115, false, false, false, 275, 'stock'));
+          $engineDyno->addEngine(new Engine(127, false, false, false, 303, 'tuned'));
           $results = $engineDyno->returnFigures();
+
           $this->assertArraySubset([
                 'stock' => [
                   'power' => [1000 => 17.71, 1500 => 29.56, 2000 => 56.12, 2500 => 69.46, 3000 => 78.2, 3500 => 87.4, 4000 => 94.3, 4500 => 100.05, 5000 => 106.95, 5500 => 111.55, 6000 => 115],
@@ -44,7 +46,7 @@ class EngineDynoFiguresTest extends \PHPUnit_Framework_TestCase
       * Pass over stock engine with power / torque figures with rev intervals to return dyno points as an array.
       */
       public function testReturnFiguresForStockEngine(){
-            $engineDynoFigures = new EngineDynoFigures($this->_completeEngineShiftPoints, new Engine(115, false, false, false, 275), new Engine);
+            $engineDynoFigures = new EngineDynoFigures($this->_completeEngineShiftPoints, new Engine(115, false, false, false, 275, 'stock'));
             $results = $engineDynoFigures->returnFigures();
             $this->assertArraySubset([
                   'stock' => [
@@ -58,7 +60,8 @@ class EngineDynoFiguresTest extends \PHPUnit_Framework_TestCase
         * Pass over tuned engine with power / torque figures with rev intervals to return dyno points as an array.
         */
         public function testReturnFiguresForTunedEngine(){
-              $engineDynoFigures = new EngineDynoFigures($this->_completeEngineShiftPoints, new Engine, new Engine(127, false, false, false, 303));
+              $engineDynoFigures = new EngineDynoFigures($this->_completeEngineShiftPoints, new Engine);
+              $engineDynoFigures->addEngine(new Engine(127, false, false, false, 303, 'tuned'));
               $results = $engineDynoFigures->returnFigures();
               $this->assertArraySubset([
                     'tuned' =>[
@@ -72,7 +75,7 @@ class EngineDynoFiguresTest extends \PHPUnit_Framework_TestCase
       * Pass over stock engine with only ps power figure with power rev intervals to return dyno points as an array.
       */
       public function testReturnFiguresStockPsPowerOnly(){
-            $engineDynoFigures = new EngineDynoFigures($this->_powerEngineShiftPoints, new Engine(115), new Engine);
+            $engineDynoFigures = new EngineDynoFigures($this->_powerEngineShiftPoints, new Engine(115));
             $results = $engineDynoFigures->returnFigures();
             $this->assertArraySubset([
                   'stock' => [
@@ -85,7 +88,8 @@ class EngineDynoFiguresTest extends \PHPUnit_Framework_TestCase
         * Pass over tuned engine with only nm torque figure with torque rev intervals to return dyno points as an array.
         */
         public function testReturnFiguresTunedNmTorqueOnly(){
-              $engineDynoFigures = new EngineDynoFigures($this->_torqueEngineShiftPoints, new Engine, new Engine(false, false, false, false, 303));
+              $engineDynoFigures = new EngineDynoFigures($this->_torqueEngineShiftPoints, new Engine);
+              $engineDynoFigures->addEngine(new Engine(false, false, false, false, 303, 'tuned'));
               $results = $engineDynoFigures->returnFigures();
               $this->assertArraySubset([
                     'tuned' =>[
@@ -98,7 +102,7 @@ class EngineDynoFiguresTest extends \PHPUnit_Framework_TestCase
         * Pass over tuned engine with ps power figure with torque rev intervals.
         */
         public function testReturnFiguresStockPsPowerOnlyWithTorqueIntervals(){
-              $engineDynoFigures = new EngineDynoFigures($this->_torqueEngineShiftPoints, new Engine(115), new Engine);
+              $engineDynoFigures = new EngineDynoFigures($this->_torqueEngineShiftPoints, new Engine(115));
               $results = $engineDynoFigures->returnFigures();
               $this->assertFalse($results);
         }
@@ -108,7 +112,7 @@ class EngineDynoFiguresTest extends \PHPUnit_Framework_TestCase
         */
         public function testReturnRevIntervals()
         {
-          $engineDynoFigures = new EngineDynoFigures($this->_completeEngineShiftPoints, new Engine, new Engine);
+          $engineDynoFigures = new EngineDynoFigures($this->_completeEngineShiftPoints, new Engine);
           $results = $engineDynoFigures->returnRevIntervals();
           $this->assertArraySubset([1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000], $results);
         }
