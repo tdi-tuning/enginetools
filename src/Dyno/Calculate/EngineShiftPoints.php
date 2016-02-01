@@ -17,6 +17,20 @@ class EngineShiftPoints
     }
 
     /**
+    * Return if power intervals are set. TEST
+    */
+    public function hasPowerIntervals(){
+        return $this->_powerIntervals ? true : false;
+    }
+
+    /**
+    * Return if torque intervals set. TEST
+    */
+    public function hasTorqueIntervals(){
+        return $this->_torqueIntervals ? true : false;
+    }
+
+    /**
     * Calculate the shift points to plot dyno graph.
     */
     public function generate($engineValue, $type = 'power')

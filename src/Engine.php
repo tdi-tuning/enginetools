@@ -11,7 +11,7 @@ class Engine
   public $lbFt;
   public $nm;
 
-  public function __construct($ps, $bhp, $kw, $lbFt, $nm)
+  public function __construct($ps = false, $bhp = false, $kw = false, $lbFt = false, $nm = false)
   {
     $this->ps = $ps;
     $this->bhp = $bhp;

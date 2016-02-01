@@ -21,6 +21,24 @@ class EngineShiftPointsTest extends \PHPUnit_Framework_TestCase
     return $method;
   }
 
+  public function testHasPowerIntervals(){
+      $shiftPoints = new EngineShiftPoints($this->_powerIntervals);
+      $result = $shiftPoints->hasPowerIntervals();
+      $this->assertTrue($result);
+  }
+
+  public function testHasTorqueIntervals(){
+      $shiftPoints = new EngineShiftPoints(false, $this->_torqueIntervals);
+      $result = $shiftPoints->hasTorqueIntervals();
+      $this->assertTrue($result);
+  }
+
+  public function testHasNoIntervals(){
+      $shiftPoints = new EngineShiftPoints();
+      $this->assertFalse($shiftPoints->hasPowerIntervals());
+      $this->assertFalse($shiftPoints->hasTorqueIntervals());
+  }
+
   public function testPrivateFigurePercent() {
     $privateFigurePercent = self::getMethod('_figurePercent');
     $shiftPoints = new EngineShiftPoints($this->_powerIntervals, $this->_torqueIntervals);
