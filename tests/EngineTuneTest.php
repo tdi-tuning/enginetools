@@ -3,6 +3,7 @@
 namespace TdiDean\EngineTools\Test;
 
 use TdiDean\EngineTools\EngineTune;
+use TdiDean\EngineTools\Engine;
 
 class EngineTuneTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,6 +24,7 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
   protected $_increasePowerKw;
   protected $_increaseTorqueLbFt;
   protected $_increaseTorqueNm;
+  protected $_testEngine;
 
 
   public function setUp(){
@@ -36,6 +38,7 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
     $this->_increaseTorqueLbFt = round($this->_tunedTorqueLbFt - $this->_stockTorqueLbFt);
     $this->_tunedTorqueNm = round($this->_multiplier * $this->_stockTorqueNm);
     $this->_increaseTorqueNm = round($this->_tunedTorqueNm - $this->_stockTorqueNm);
+    $this->_testEngine = new Engine($this->_stockPowerPs, $this->_stockPowerBhp, $this->_stockPowerKw, $this->_stockTorqueLbFt, $this->_stockTorqueNm);
   }
 
     /**
@@ -334,6 +337,20 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
         $engine = new EngineTune($this->_multiplier);
         $results = $engine->calculateAll();
         $this->assertFalse($results);
+    }
+
+    /**
+    * Pass an engine object over and tune.
+    */
+    public function testTuneEngine(){
+        $engineTune = new EngineTune($this->_multiplier);
+        $tunedEngine = $engineTune->tuneEngine($this->_testEngine);
+
+        $this->assertEquals($this->_tunedPowerPs, $tunedEngine->ps);
+        $this->assertEquals($this->_tunedPowerBhp, $tunedEngine->bhp);
+        $this->assertEquals($this->_tunedPowerKw, $tunedEngine->kw);
+        $this->assertEquals($this->_tunedTorqueLbFt, $tunedEngine->lbFt);
+        $this->assertEquals($this->_tunedTorqueNm, $tunedEngine->nm);
     }
 
 

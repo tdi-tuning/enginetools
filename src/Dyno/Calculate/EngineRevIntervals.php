@@ -2,7 +2,7 @@
 
 namespace TdiDean\EngineTools\Dyno\Calculate;
 
-class EngineShiftPoints
+class EngineRevIntervals
 {
   protected $_powerIntervals = [];
   protected $_torqueIntervals = [];
@@ -17,6 +17,20 @@ class EngineShiftPoints
     }
 
     /**
+    * Return if power intervals are set. TEST
+    */
+    public function hasPowerIntervals(){
+        return $this->_powerIntervals ? true : false;
+    }
+
+    /**
+    * Return if torque intervals set. TEST
+    */
+    public function hasTorqueIntervals(){
+        return $this->_torqueIntervals ? true : false;
+    }
+
+    /**
     * Calculate the shift points to plot dyno graph.
     */
     public function generate($engineValue, $type = 'power')
@@ -26,12 +40,12 @@ class EngineShiftPoints
         $intervals = ($type == 'power') ? $this->_powerIntervals : $this->_torqueIntervals;
         if($intervals)
         {
-          $shiftPoints = [];
+          $revs = [];
           foreach($intervals as $revInterval => $figure)
           {
-            $shiftPoints[$revInterval] = $this->_figurePercent($engineValue, $figure);
+            $revs[$revInterval] = $this->_figurePercent($engineValue, $figure);
           }
-          return $shiftPoints;
+          return $revs;
         }
       }
       return false;

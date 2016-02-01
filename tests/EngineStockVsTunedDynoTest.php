@@ -2,9 +2,9 @@
 
 namespace TdiDean\EngineTools\Test;
 
-use TdiDean\EngineTools\Dyno\EngineDyno;
+use TdiDean\EngineTools\Dyno\EngineStockVsTunedDyno as EngineDyno;
 
-class EngineDynoTest extends \PHPUnit_Framework_TestCase
+class EngineStockVsTunedDynoTest extends \PHPUnit_Framework_TestCase
 {
 
   protected $_powerIntervals = [1000 => 15.4, 1500 => 25.7, 2000 => 48.8, 2500 => 60.4, 3000 => 68, 3500 => 76, 4000 => 82, 4500 => 87, 5000 => 93, 5500 => 97, 6000 => 100];
