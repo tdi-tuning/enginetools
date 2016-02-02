@@ -342,7 +342,7 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
     /**
     * Pass an engine object over and tune.
     */
-    public function testTuneEngine(){
+    public function testTune(){
         $engineTune = new EngineTune($this->_multiplier);
         $tunedEngine = $engineTune->tune($this->_testEngine);
 
@@ -351,6 +351,53 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->_tunedPowerKw, $tunedEngine->kw);
         $this->assertEquals($this->_tunedTorqueLbFt, $tunedEngine->lbFt);
         $this->assertEquals($this->_tunedTorqueNm, $tunedEngine->nm);
+
+        return $tunedEngine;
+    }
+
+    /**
+     * Compare stock and tuned engine.
+     * @depends testTune
+     */
+    public function testCompare(Engine $tunedEngine){
+        $engineTune = new EngineTune($this->_multiplier);
+        $results = $engineTune->compare($this->_testEngine, $tunedEngine);
+        $this->assertArraySubset(
+        [
+            'power' => [
+                'ps' => ['stock' => $this->_stockPowerPs, 'tuned' => $this->_tunedPowerPs, 'increase' => $this->_increasePowerPs],
+                'bhp' => ['stock' => $this->_stockPowerBhp, 'tuned' => $this->_tunedPowerBhp, 'increase' => $this->_increasePowerBhp],
+                'kw' => ['stock' => $this->_stockPowerKw, 'tuned' => $this->_tunedPowerKw, 'increase' => $this->_increasePowerKw]
+            ],
+            'torque' => [
+                'lb_ft' => ['stock' => $this->_stockTorqueLbFt, 'tuned' => $this->_tunedTorqueLbFt, 'increase' => $this->_increaseTorqueLbFt],
+                'nm' => ['stock' => $this->_stockTorqueNm, 'tuned' => $this->_tunedTorqueNm, 'increase' => $this->_increaseTorqueNm]
+            ]
+        ], $results);
+    }
+
+    /**
+     * Compare stock and tuned engine, without supplying tuned engine.
+     */
+    public function testCompareWithoutTunedEngine(){
+        try {
+          $engineTune = new EngineTune($this->_multiplier);
+          $results = $engineTune->compare($this->_testEngine);
+        } catch(\Exception $e) {
+            $this->assertContains('must be an instance of TdiDean\EngineTools\Engine', $e->getMessage());
+        }
+    }
+
+    /**
+     * Compare stock and tuned engine, without supplying any engines.
+     */
+    public function testCompareWithoutEngines(){
+        try {
+          $engineTune = new EngineTune($this->_multiplier);
+          $results = $engineTune->compare();
+        } catch(\Exception $e) {
+            $this->assertContains('must be an instance of TdiDean\EngineTools\Engine', $e->getMessage());
+        }
     }
 
 
