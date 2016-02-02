@@ -344,7 +344,7 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
     */
     public function testTuneEngine(){
         $engineTune = new EngineTune($this->_multiplier);
-        $tunedEngine = $engineTune->tuneEngine($this->_testEngine);
+        $tunedEngine = $engineTune->tune($this->_testEngine);
 
         $this->assertEquals($this->_tunedPowerPs, $tunedEngine->ps);
         $this->assertEquals($this->_tunedPowerBhp, $tunedEngine->bhp);
