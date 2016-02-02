@@ -29,5 +29,4 @@ class EngineStockVsTunedDyno
     return $dynoFigures->returnFigures();
   }
 
-
 }
