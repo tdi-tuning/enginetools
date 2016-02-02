@@ -9,7 +9,6 @@ class EngineDynoFigures implements EngineDynoFormatInterface
 {
   protected $_engineRevIntervals;
   protected $_engines = [];
-  protected $_secondEngine = false;
 
   public function __construct(EngineRevIntervals $engineRevIntervals, Engine $engine)
   {
