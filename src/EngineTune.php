@@ -93,7 +93,7 @@ class EngineTune {
      * @return Engine $engine
      */
      public function tune(Engine $engine){
-       return new Engine($this->calculate($engine->ps, 'ps')['ps']['tuned'], $this->calculate($engine->bhp, 'bhp')['bhp']['tuned'], $this->calculate($engine->kw, 'kw')['kw']['tuned'], $this->calculate($engine->lbFt, 'lb_ft')['lb_ft']['tuned'], $this->calculate($engine->nm, 'nm')['nm']['tuned'], 'tunned');
+       return new Engine($this->calculate($engine->ps, 'ps')['ps']['tuned'], $this->calculate($engine->bhp, 'bhp')['bhp']['tuned'], $this->calculate($engine->kw, 'kw')['kw']['tuned'], $this->calculate($engine->lbFt, 'lb_ft')['lb_ft']['tuned'], $this->calculate($engine->nm, 'nm')['nm']['tuned'], 'tuned');
      }
 
 }
