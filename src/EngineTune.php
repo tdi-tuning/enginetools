@@ -96,4 +96,45 @@ class EngineTune {
        return new Engine($this->calculate($engine->ps, 'ps')['ps']['tuned'], $this->calculate($engine->bhp, 'bhp')['bhp']['tuned'], $this->calculate($engine->kw, 'kw')['kw']['tuned'], $this->calculate($engine->lbFt, 'lb_ft')['lb_ft']['tuned'], $this->calculate($engine->nm, 'nm')['nm']['tuned'], 'tuned');
      }
 
+    /**
+     * Compare two engines side by side, in array format.
+     * @param \TdiDean\EngineTools\Engine $stockEngine
+     * @param \TdiDean\EngineTools\Engine $tunedEngine
+     * @return type
+     */
+    public function compare(Engine $stockEngine, Engine $tunedEngine) {
+        return ['power' =>
+            [
+                'ps' => [
+                    'stock' => $stockEngine->ps ?: null,
+                    'tuned' => $tunedEngine->ps ?: null,
+                    'increase' => ($tunedEngine->ps) - ($stockEngine->ps) ?: null
+                ],
+                'bhp' => [
+                    'stock' => $stockEngine->bhp ?: null,
+                    'tuned' => $tunedEngine->bhp ?: null,
+                    'increase' => ($tunedEngine->bhp) - ($stockEngine->bhp) ?: null
+                ],
+                'kw' => [
+                    'stock' => $stockEngine->kw ?: null,
+                    'tuned' => $tunedEngine->kw ?: null,
+                    'increase' => ($tunedEngine->kw) - ($stockEngine->kw) ?: null
+                ]
+            ],
+            'torque' =>
+            [
+                'lb_ft' => [
+                    'stock' => $stockEngine->lbFt ?: null,
+                    'tuned' => $tunedEngine->lbFt ?: null,
+                    'increase' => ($tunedEngine->lbFt) - ($stockEngine->lbFt) ?: null
+                ],
+                'nm' => [
+                    'stock' => $stockEngine->nm ?: null,
+                    'tuned' => $tunedEngine->nm ?: null,
+                    'increase' => ($tunedEngine->nm) - ($stockEngine->nm) ?: null
+                ]
+            ]
+        ];
+    }
+
 }
