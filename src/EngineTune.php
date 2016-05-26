@@ -6,6 +6,10 @@ class EngineTune {
 
     protected $_multiplier;
 
+    // figures for calculating the individual program values
+    protected $_programPowerMultiplier = 0.989;
+    protected $_programTorqueMultiplier = 0.985;
+
     /**
      * Set multiplier, default 1.
      * @param type $multiplier
@@ -135,6 +139,29 @@ class EngineTune {
                 ]
             ]
         ];
+    }
+
+    /**
+     * Returns figures to show the differences between the programs on the tuning box.
+     * @param  \TdiDean\EngineTools\Engine $tunedEngine An engine which has been pre tuned to its maximum program.
+     * @return array                                    Array showing engine figures at different tuning box programs.
+     */
+    public function returnTuningBoxProgramFigures(Engine $tunedEngine){
+        $programFigures = array();
+        $programFigures[6]['bhp'] = $tunedEngine->bhp; 
+        $programFigures[6]['ps'] = $tunedEngine->ps;
+        $programFigures[6]['nm'] = $tunedEngine->nm;
+        $programFigures[6]['lb_ft'] = $tunedEngine->lbFt;
+        for ($i=5;$i>=0;$i--){
+            $programFigures[$i]['bhp'] = $programFigures[$i+1]['bhp']*$this->_programPowerMultiplier;
+            $programFigures[$i]['ps'] = $programFigures[$i+1]['ps']*$this->_programPowerMultiplier;
+            $programFigures[$i]['nm'] = $programFigures[$i+1]['nm']*$this->_programTorqueMultiplier;
+            $programFigures[$i]['lb_ft'] = $programFigures[$i+1]['lb_ft']*$this->_programTorqueMultiplier; 
+        }
+        array_walk_recursive($programFigures, function(&$item, $key){   
+                $item = round($item);
+        });
+        return $programFigures;
     }
 
 }

@@ -7,7 +7,8 @@ use TdiDean\EngineTools\Engine;
 
 class EngineTuneTest extends \PHPUnit_Framework_TestCase
 {
-
+  protected $_programPowerMultiplier = 0.989;
+  protected $_programTorqueMultiplier = 0.985;
   protected $_multiplier = 1.1;
   protected $_stockPowerPs = 115;
   protected $_stockPowerBhp = 113;
@@ -380,6 +381,7 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
      * Compare stock and tuned engine, without supplying tuned engine.
      */
     public function testCompareWithoutTunedEngine(){
+        $this->setExpectedException('TypeError');
         try {
           $engineTune = new EngineTune($this->_multiplier);
           $results = $engineTune->compare($this->_testEngine);
@@ -392,12 +394,105 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
      * Compare stock and tuned engine, without supplying any engines.
      */
     public function testCompareWithoutEngines(){
+        $this->setExpectedException('TypeError');
         try {
           $engineTune = new EngineTune($this->_multiplier);
           $results = $engineTune->compare();
         } catch(\Exception $e) {
             $this->assertContains('must be an instance of TdiDean\EngineTools\Engine', $e->getMessage());
         }
+    }
+
+
+    /**
+     * Checks an array is returned for program figures
+    */
+    public function testGenerationOfFigureArray(){
+      $engineTune = new EngineTune($this->_multiplier);
+      $tunedEngine = $engineTune->tune($this->_testEngine);
+      
+      $programFigures = $engineTune->returnTuningBoxProgramFigures($tunedEngine);
+      $this->assertTrue(is_array($programFigures));
+    }
+
+    /**
+     * Checks torque values are included within program figures
+    */
+    public function testInclusionOfTorqueFigures(){
+      $engineTune = new EngineTune($this->_multiplier);
+      $tunedEngine = $engineTune->tune($this->_testEngine);
+      
+      $programFigures = $engineTune->returnTuningBoxProgramFigures($tunedEngine);
+      $this->assertArrayHasKey('nm',$programFigures[0]);
+      $this->assertArrayHasKey('lb_ft',$programFigures[0]);
+    }
+
+    /**
+     * Checks power values are included within program figures
+    */
+    public function testInclusionOfPowerFigures(){
+      $engineTune = new EngineTune($this->_multiplier);
+      $tunedEngine = $engineTune->tune($this->_testEngine);
+      
+      $programFigures = $engineTune->returnTuningBoxProgramFigures($tunedEngine);
+      $this->assertArrayHasKey('bhp',$programFigures[0]);
+      $this->assertArrayHasKey('ps',$programFigures[0]);
+    }
+
+    /**
+     * Checks an error is thrown when no engine is passed to the program calculation function
+    */
+    public function testWithoutPassingEngineObject(){
+      $engineTune = new EngineTune($this->_multiplier);
+
+      $this->setExpectedException('TypeError');
+      try {
+        $programFigures = $engineTune->returnTuningBoxProgramFigures(null);
+      } catch(\Exception $e) {
+          $this->assertContains('must be an instance of TdiDean\EngineTools\Engine', $e->getMessage());
+      }
+    }
+
+    /**
+     * Checks there are 7 programs returned
+    */
+    public function testNumberOfPrograms(){
+      $engineTune = new EngineTune($this->_multiplier);
+      $tunedEngine = $engineTune->tune($this->_testEngine);
+
+      $programFigures = $engineTune->returnTuningBoxProgramFigures($tunedEngine);
+
+      $this->assertEquals(count($programFigures),7);
+    }
+
+    /**
+     * Tests the maximum program values against original tuned engine values.
+    */
+    public function testMaxProgramValues(){
+      $engineTune = new EngineTune($this->_multiplier);
+      $tunedEngine = $engineTune->tune($this->_testEngine);
+
+      $programFigures = $engineTune->returnTuningBoxProgramFigures($tunedEngine);
+
+      $this->assertEquals($programFigures[6]['bhp'],$tunedEngine->bhp);
+      $this->assertEquals($programFigures[6]['ps'],$tunedEngine->ps);
+      $this->assertEquals($programFigures[6]['nm'],$tunedEngine->nm);
+      $this->assertEquals($programFigures[6]['lb_ft'],$tunedEngine->lbFt);
+    }
+
+    /**
+     *  Tests the second highest program values against original tuned engine values.
+    */
+    public function testSecondProgramValues(){
+      $engineTune = new EngineTune($this->_multiplier);
+      $tunedEngine = $engineTune->tune($this->_testEngine);
+
+      $programFigures = $engineTune->returnTuningBoxProgramFigures($tunedEngine);
+
+      $this->assertEquals($programFigures[5]['bhp'],round($tunedEngine->bhp*$this->_programPowerMultiplier));
+      $this->assertEquals($programFigures[5]['ps'],round($tunedEngine->ps*$this->_programPowerMultiplier));
+      $this->assertEquals($programFigures[5]['nm'],round($tunedEngine->nm*$this->_programTorqueMultiplier));
+      $this->assertEquals($programFigures[5]['lb_ft'],round($tunedEngine->lbFt*$this->_programTorqueMultiplier));
     }
 
 
