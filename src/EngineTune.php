@@ -150,11 +150,13 @@ class EngineTune {
         $programFigures = array();
         $programFigures[6]['bhp'] = $tunedEngine->bhp; 
         $programFigures[6]['ps'] = $tunedEngine->ps;
+        $programFigures[6]['kw'] = $tunedEngine->kw;
         $programFigures[6]['nm'] = $tunedEngine->nm;
         $programFigures[6]['lb_ft'] = $tunedEngine->lbFt;
         for ($i=5;$i>=0;$i--){
             $programFigures[$i]['bhp'] = $programFigures[$i+1]['bhp']*$this->_programPowerMultiplier;
             $programFigures[$i]['ps'] = $programFigures[$i+1]['ps']*$this->_programPowerMultiplier;
+            $programFigures[$i]['kw'] = $programFigures[$i+1]['kw']*$this->_programPowerMultiplier;
             $programFigures[$i]['nm'] = $programFigures[$i+1]['nm']*$this->_programTorqueMultiplier;
             $programFigures[$i]['lb_ft'] = $programFigures[$i+1]['lb_ft']*$this->_programTorqueMultiplier; 
         }

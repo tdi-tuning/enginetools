@@ -437,6 +437,7 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
       $programFigures = $engineTune->returnTuningBoxProgramFigures($tunedEngine);
       $this->assertArrayHasKey('bhp',$programFigures[0]);
       $this->assertArrayHasKey('ps',$programFigures[0]);
+      $this->assertArrayHasKey('kw',$programFigures[0]);
     }
 
     /**
@@ -476,6 +477,7 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
 
       $this->assertEquals($programFigures[6]['bhp'],$tunedEngine->bhp);
       $this->assertEquals($programFigures[6]['ps'],$tunedEngine->ps);
+      $this->assertEquals($programFigures[6]['kw'],$tunedEngine->kw);
       $this->assertEquals($programFigures[6]['nm'],$tunedEngine->nm);
       $this->assertEquals($programFigures[6]['lb_ft'],$tunedEngine->lbFt);
     }
@@ -491,6 +493,7 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
 
       $this->assertEquals($programFigures[5]['bhp'],round($tunedEngine->bhp*$this->_programPowerMultiplier));
       $this->assertEquals($programFigures[5]['ps'],round($tunedEngine->ps*$this->_programPowerMultiplier));
+      $this->assertEquals($programFigures[5]['kw'],round($tunedEngine->kw*$this->_programPowerMultiplier));
       $this->assertEquals($programFigures[5]['nm'],round($tunedEngine->nm*$this->_programTorqueMultiplier));
       $this->assertEquals($programFigures[5]['lb_ft'],round($tunedEngine->lbFt*$this->_programTorqueMultiplier));
     }
