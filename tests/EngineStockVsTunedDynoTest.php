@@ -80,8 +80,9 @@ class EngineStockVsTunedDynoTest extends \PHPUnit_Framework_TestCase
     /**
     * Pass over stock engine only with with rev intervals.
     */
-    public function testReturnFiguresForStockOnlyAsArray(){
-          try {
+    public function testReturnFiguresForStockOnlyAsArray(){          
+          $this->setExpectedException('TypeError');
+          try {              
               $engineDyno = new EngineStockVsTunedDyno($this->_stockEngine, null, $this->_powerIntervals, $this->_torqueIntervals);
           } catch(\Exception $e) {
               $this->assertContains('must be an instance of TdiDean\EngineTools\Engine', $e->getMessage());
@@ -92,6 +93,7 @@ class EngineStockVsTunedDynoTest extends \PHPUnit_Framework_TestCase
     * Pass over tuned engine only with rev intervals.
     */
     public function testReturnFiguresForTunedOnlyAsArray(){
+          $this->setExpectedException('TypeError');
           try {
               $engineDyno = new EngineStockVsTunedDyno(null, $this->_tunedEngine, $this->_powerIntervals, $this->_torqueIntervals);
           } catch(\Exception $e) {
