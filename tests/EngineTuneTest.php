@@ -9,7 +9,8 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
 {
   protected $_programPowerMultiplier = 0.989;
   protected $_programTorqueMultiplier = 0.985;
-  protected $_multiplier = 1.1;
+  protected $_powerMultiplier = 1.1;
+  protected $_torqueMultiplier = 1.2;
   protected $_stockPowerPs = 115;
   protected $_stockPowerBhp = 113;
   protected $_stockPowerKw = 85;
@@ -29,15 +30,15 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
 
 
   public function setUp(){
-    $this->_tunedPowerPs = round($this->_multiplier * $this->_stockPowerPs);
+    $this->_tunedPowerPs = round($this->_powerMultiplier * $this->_stockPowerPs);
     $this->_increasePowerPs = round($this->_tunedPowerPs - $this->_stockPowerPs);
-    $this->_tunedPowerBhp = round($this->_multiplier * $this->_stockPowerBhp);
+    $this->_tunedPowerBhp = round($this->_powerMultiplier * $this->_stockPowerBhp);
     $this->_increasePowerBhp = round($this->_tunedPowerBhp - $this->_stockPowerBhp);
-    $this->_tunedPowerKw = round($this->_multiplier * $this->_stockPowerKw);
+    $this->_tunedPowerKw = round($this->_powerMultiplier * $this->_stockPowerKw);
     $this->_increasePowerKw = round($this->_tunedPowerKw - $this->_stockPowerKw);
-    $this->_tunedTorqueLbFt = round($this->_multiplier * $this->_stockTorqueLbFt);
+    $this->_tunedTorqueLbFt = round($this->_torqueMultiplier * $this->_stockTorqueLbFt);
     $this->_increaseTorqueLbFt = round($this->_tunedTorqueLbFt - $this->_stockTorqueLbFt);
-    $this->_tunedTorqueNm = round($this->_multiplier * $this->_stockTorqueNm);
+    $this->_tunedTorqueNm = round($this->_torqueMultiplier * $this->_stockTorqueNm);
     $this->_increaseTorqueNm = round($this->_tunedTorqueNm - $this->_stockTorqueNm);
     $this->_testEngine = new Engine($this->_stockPowerPs, $this->_stockPowerBhp, $this->_stockPowerKw, $this->_stockTorqueLbFt, $this->_stockTorqueNm);
   }
@@ -47,7 +48,7 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
      */
     public function testCalculatePowerPs()
     {
-        $engine = new EngineTune($this->_multiplier);
+        $engine = new EngineTune($this->_powerMultiplier, $this->_torqueMultiplier);
         $results = $engine->calculate($this->_stockPowerPs);
         $this->assertArraySubset(['ps' => ['stock' => $this->_stockPowerPs, 'tuned' => $this->_tunedPowerPs, 'increase' => $this->_increasePowerPs]], $results);
     }
@@ -57,7 +58,7 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
      */
     public function testCalculatePowerKw()
     {
-      $engine = new EngineTune($this->_multiplier);
+      $engine = new EngineTune($this->_powerMultiplier, $this->_torqueMultiplier);
       $results = $engine->calculate($this->_stockPowerKw, 'kw');
       $this->assertArraySubset(['kw' => ['stock' => $this->_stockPowerKw, 'tuned' => $this->_tunedPowerKw, 'increase' => $this->_increasePowerKw]], $results);
     }
@@ -67,7 +68,7 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
      */
     public function testCalculateTorqueNm()
     {
-      $engine = new EngineTune($this->_multiplier);
+      $engine = new EngineTune($this->_powerMultiplier, $this->_torqueMultiplier);
       $results = $engine->calculate($this->_stockTorqueNm, 'nm');
       $this->assertArraySubset(['nm' => ['stock' => $this->_stockTorqueNm, 'tuned' => $this->_tunedTorqueNm, 'increase' => $this->_increaseTorqueNm]], $results);
     }
@@ -87,7 +88,7 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
      */
     public function testCalculatePowerPsWithZeroStockFigure()
     {
-        $engine = new EngineTune($this->_multiplier);
+        $engine = new EngineTune($this->_powerMultiplier, $this->_torqueMultiplier);
         $results = $engine->calculate(0, 'bhp');
         $this->assertFalse($results);
     }
@@ -97,7 +98,7 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
      */
     public function testCalculatePowerPsWithNoStockFigure()
     {
-        $engine = new EngineTune($this->_multiplier);
+        $engine = new EngineTune($this->_powerMultiplier, $this->_torqueMultiplier);
         $results = $engine->calculate();
         $this->assertFalse($results);
     }
@@ -106,7 +107,7 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
     * Calculate all power figures ps, bhp and kw, with multiplier.
     */
     public function testCalculatePower(){
-        $engine = new EngineTune($this->_multiplier);
+        $engine = new EngineTune($this->_powerMultiplier, $this->_torqueMultiplier);
         $results = $engine->calculatePower($this->_stockPowerPs, $this->_stockPowerBhp, $this->_stockPowerKw);
 
         $this->assertArraySubset(
@@ -141,7 +142,7 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
      */
     public function testCalculatePowerWithMissingStockFigures()
     {
-        $engine = new EngineTune($this->_multiplier);
+        $engine = new EngineTune($this->_powerMultiplier, $this->_torqueMultiplier);
         $results = $engine->calculatePower(false, $this->_stockPowerBhp);
 
         $this->assertArraySubset(
@@ -158,7 +159,7 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
      */
     public function testCalculatePowerWithMissingAllStockFigures()
     {
-        $engine = new EngineTune($this->_multiplier);
+        $engine = new EngineTune($this->_powerMultiplier, $this->_torqueMultiplier);
         $results = $engine->calculatePower();
 
         $this->assertFalse($results);
@@ -169,7 +170,7 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
     * Calculate all torque figures lb ft and nm, with multiplier.
     */
     public function testCalculateTorque(){
-        $engine = new EngineTune($this->_multiplier);
+        $engine = new EngineTune($this->_powerMultiplier, $this->_torqueMultiplier);
         $results = $engine->calculateTorque($this->_stockTorqueLbFt, $this->_stockTorqueNm);
 
         $this->assertArraySubset(
@@ -202,7 +203,7 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
      */
     public function testCalculateTorqueWithMissingStockFigures()
     {
-        $engine = new EngineTune($this->_multiplier);
+        $engine = new EngineTune($this->_powerMultiplier, $this->_torqueMultiplier);
         $results = $engine->calculateTorque($this->_stockTorqueLbFt);
 
         $this->assertArraySubset(
@@ -219,7 +220,7 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
      */
     public function testCalculateTorqueWithMissingAllStockFigures()
     {
-        $engine = new EngineTune($this->_multiplier);
+        $engine = new EngineTune($this->_powerMultiplier, $this->_torqueMultiplier);
         $results = $engine->calculateTorque();
 
         $this->assertFalse($results);
@@ -231,7 +232,7 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
      */
     public function testCalculateAll()
     {
-        $engine = new EngineTune($this->_multiplier);
+        $engine = new EngineTune($this->_powerMultiplier, $this->_torqueMultiplier);
         $results = $engine->calculateAll($this->_stockPowerPs, $this->_stockPowerBhp, $this->_stockPowerKw, $this->_stockTorqueLbFt, $this->_stockTorqueNm);
 
         $this->assertArraySubset(
@@ -277,7 +278,7 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
      */
     public function testCalculateAllWithMissingStockFigures()
     {
-        $engine = new EngineTune($this->_multiplier);
+        $engine = new EngineTune($this->_powerMultiplier, $this->_torqueMultiplier);
         $results = $engine->calculateAll($this->_stockPowerPs, $this->_stockPowerBhp, false, false, $this->_stockTorqueNm);
 
         $this->assertArraySubset(
@@ -298,7 +299,7 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
      */
     public function testCalculateAllWithMissingTorqueStockFigures()
     {
-        $engine = new EngineTune($this->_multiplier);
+        $engine = new EngineTune($this->_powerMultiplier, $this->_torqueMultiplier);
         $results = $engine->calculateAll($this->_stockPowerPs, $this->_stockPowerBhp, $this->_stockPowerKw, false, false);
 
         $this->assertArraySubset(
@@ -317,7 +318,7 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
      */
     public function testCalculateAllWithMissingPowerStockFigures()
     {
-        $engine = new EngineTune($this->_multiplier);
+        $engine = new EngineTune($this->_powerMultiplier, $this->_torqueMultiplier);
         $results = $engine->calculateAll(false, false, false, $this->_stockTorqueLbFt, $this->_stockTorqueNm);
 
         $this->assertArraySubset(
@@ -335,7 +336,7 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
      */
     public function testCalculateAllWithMissingAllStockFigures()
     {
-        $engine = new EngineTune($this->_multiplier);
+        $engine = new EngineTune($this->_powerMultiplier, $this->_torqueMultiplier);
         $results = $engine->calculateAll();
         $this->assertFalse($results);
     }
@@ -344,7 +345,7 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
     * Pass an engine object over and tune.
     */
     public function testTune(){
-        $engineTune = new EngineTune($this->_multiplier);
+        $engineTune = new EngineTune($this->_powerMultiplier, $this->_torqueMultiplier);
         $tunedEngine = $engineTune->tune($this->_testEngine);
 
         $this->assertEquals($this->_tunedPowerPs, $tunedEngine->ps);
@@ -361,7 +362,7 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
      * @depends testTune
      */
     public function testCompare(Engine $tunedEngine){
-        $engineTune = new EngineTune($this->_multiplier);
+        $engineTune = new EngineTune($this->_powerMultiplier, $this->_torqueMultiplier);
         $results = $engineTune->compare($this->_testEngine, $tunedEngine);
         $this->assertArraySubset(
         [
@@ -383,7 +384,7 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
     public function testCompareWithoutTunedEngine(){
         $this->setExpectedException('TypeError');
         try {
-          $engineTune = new EngineTune($this->_multiplier);
+          $engineTune = new EngineTune($this->_powerMultiplier, $this->_torqueMultiplier);
           $results = $engineTune->compare($this->_testEngine);
         } catch(\Exception $e) {
             $this->assertContains('must be an instance of TdiDean\EngineTools\Engine', $e->getMessage());
@@ -396,7 +397,7 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
     public function testCompareWithoutEngines(){
         $this->setExpectedException('TypeError');
         try {
-          $engineTune = new EngineTune($this->_multiplier);
+          $engineTune = new EngineTune($this->_powerMultiplier, $this->_torqueMultiplier);
           $results = $engineTune->compare();
         } catch(\Exception $e) {
             $this->assertContains('must be an instance of TdiDean\EngineTools\Engine', $e->getMessage());
@@ -408,7 +409,7 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
      * Checks an array is returned for program figures
     */
     public function testGenerationOfFigureArray(){
-      $engineTune = new EngineTune($this->_multiplier);
+      $engineTune = new EngineTune($this->_powerMultiplier, $this->_torqueMultiplier);
       $tunedEngine = $engineTune->tune($this->_testEngine);
       
       $programFigures = $engineTune->returnTuningBoxProgramFigures($tunedEngine);
@@ -419,7 +420,7 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
      * Checks torque values are included within program figures
     */
     public function testInclusionOfTorqueFigures(){
-      $engineTune = new EngineTune($this->_multiplier);
+      $engineTune = new EngineTune($this->_powerMultiplier, $this->_torqueMultiplier);
       $tunedEngine = $engineTune->tune($this->_testEngine);
       
       $programFigures = $engineTune->returnTuningBoxProgramFigures($tunedEngine);
@@ -431,7 +432,7 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
      * Checks power values are included within program figures
     */
     public function testInclusionOfPowerFigures(){
-      $engineTune = new EngineTune($this->_multiplier);
+      $engineTune = new EngineTune($this->_powerMultiplier, $this->_torqueMultiplier);
       $tunedEngine = $engineTune->tune($this->_testEngine);
       
       $programFigures = $engineTune->returnTuningBoxProgramFigures($tunedEngine);
@@ -443,7 +444,7 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
      * Checks an error is thrown when no engine is passed to the program calculation function
     */
     public function testWithoutPassingEngineObject(){
-      $engineTune = new EngineTune($this->_multiplier);
+      $engineTune = new EngineTune($this->_powerMultiplier, $this->_torqueMultiplier);
 
       $this->setExpectedException('TypeError');
       try {
@@ -457,7 +458,7 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
      * Checks there are 7 programs returned
     */
     public function testNumberOfPrograms(){
-      $engineTune = new EngineTune($this->_multiplier);
+      $engineTune = new EngineTune($this->_powerMultiplier, $this->_torqueMultiplier);
       $tunedEngine = $engineTune->tune($this->_testEngine);
 
       $programFigures = $engineTune->returnTuningBoxProgramFigures($tunedEngine);
@@ -469,7 +470,7 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
      * Tests the maximum program values against original tuned engine values.
     */
     public function testMaxProgramValues(){
-      $engineTune = new EngineTune($this->_multiplier);
+      $engineTune = new EngineTune($this->_powerMultiplier, $this->_torqueMultiplier);
       $tunedEngine = $engineTune->tune($this->_testEngine);
 
       $programFigures = $engineTune->returnTuningBoxProgramFigures($tunedEngine);
@@ -484,7 +485,7 @@ class EngineTuneTest extends \PHPUnit_Framework_TestCase
      *  Tests the second highest program values against original tuned engine values.
     */
     public function testSecondProgramValues(){
-      $engineTune = new EngineTune($this->_multiplier);
+      $engineTune = new EngineTune($this->_powerMultiplier, $this->_torqueMultiplier);
       $tunedEngine = $engineTune->tune($this->_testEngine);
 
       $programFigures = $engineTune->returnTuningBoxProgramFigures($tunedEngine);
