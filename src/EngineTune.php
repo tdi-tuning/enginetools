@@ -4,18 +4,24 @@ namespace TdiDean\EngineTools;
 
 class EngineTune {
 
-    protected $_multiplier;
+    protected $_powerMultiplier;
+    protected $_torqueMultiplier;
 
     // figures for calculating the individual program values
     protected $_programPowerMultiplier = 0.989;
     protected $_programTorqueMultiplier = 0.985;
 
+    protected $_powerUnits = ['ps', 'bhp', 'kw'];
+    protected $_torqueUnits = ['nm', 'lb_ft'];
+
     /**
-     * Set multiplier, default 1.
-     * @param type $multiplier
+     * Set multipliers, default 1.
+     * @param int $powerMultiplier
+     * @param int $torqueMultiplier
      */
-    public function __construct($multiplier = 1) {
-        $this->_multiplier = $multiplier;
+    public function __construct($powerMultiplier = 1, $torqueMultiplier = 1) {
+        $this->_powerMultiplier = $powerMultiplier;
+        $this->_torqueMultiplier = $torqueMultiplier;
     }
 
     /**
@@ -26,7 +32,8 @@ class EngineTune {
      */
     public function calculate($stockFigure = false, $unit = 'ps') {
         if (($stockFigure) && ($stockFigure > 0)) {
-            $gains = round($stockFigure * $this->_multiplier);
+            $multiplier = in_array($unit,$this->_powerUnits)?$this->_powerMultiplier:$this->_torqueMultiplier;
+            $gains = round($stockFigure * $multiplier);
             return [$unit =>
                 [
                     'stock' => round($stockFigure),
