@@ -104,7 +104,7 @@ class EngineTune {
      * @return Engine $engine
      */
      public function tune(Engine $engine){
-       return new Engine($this->calculate($engine->ps, 'ps')['ps']['tuned'], $this->calculate($engine->bhp, 'bhp')['bhp']['tuned'], $this->calculate($engine->kw, 'kw')['kw']['tuned'], $this->calculate($engine->lbFt, 'lb_ft')['lb_ft']['tuned'], $this->calculate($engine->nm, 'nm')['nm']['tuned'], 'tuned');
+       return new Engine($this->calculate($engine->ps, 'ps')['ps']['tuned'] ?? null, $this->calculate($engine->bhp, 'bhp')['bhp']['tuned'] ?? null, $this->calculate($engine->kw, 'kw')['kw']['tuned'] ?? null, $this->calculate($engine->lbFt, 'lb_ft')['lb_ft']['tuned'] ?? null, $this->calculate($engine->nm, 'nm')['nm']['tuned'] ?? null, 'tuned');
      }
 
     /**
@@ -155,7 +155,7 @@ class EngineTune {
      */
     public function returnTuningBoxProgramFigures(Engine $tunedEngine){
         $programFigures = array();
-        $programFigures[6]['bhp'] = $tunedEngine->bhp; 
+        $programFigures[6]['bhp'] = $tunedEngine->bhp;
         $programFigures[6]['ps'] = $tunedEngine->ps;
         $programFigures[6]['kw'] = $tunedEngine->kw;
         $programFigures[6]['nm'] = $tunedEngine->nm;
@@ -165,9 +165,9 @@ class EngineTune {
             $programFigures[$i]['ps'] = $programFigures[$i+1]['ps']*$this->_programPowerMultiplier;
             $programFigures[$i]['kw'] = $programFigures[$i+1]['kw']*$this->_programPowerMultiplier;
             $programFigures[$i]['nm'] = $programFigures[$i+1]['nm']*$this->_programTorqueMultiplier;
-            $programFigures[$i]['lb_ft'] = $programFigures[$i+1]['lb_ft']*$this->_programTorqueMultiplier; 
+            $programFigures[$i]['lb_ft'] = $programFigures[$i+1]['lb_ft']*$this->_programTorqueMultiplier;
         }
-        array_walk_recursive($programFigures, function(&$item, $key){   
+        array_walk_recursive($programFigures, function(&$item, $key){
                 $item = round($item);
         });
         return $programFigures;
